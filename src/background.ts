@@ -69,7 +69,13 @@ chrome.commands.onCommand.addListener(function (command, tab) {
     ) {
       const startUrl = currentUrl.split('#')[0]
       const url = `${startUrl}#${voteCount.commentId}`
-      chrome.tabs.update(tabId, { url })
+
+      console.log('sending', voteCount.commentId)
+      chrome.tabs.sendMessage(tabId, {
+        type: messageTypes.scrollToComment,
+        commentId: voteCount.commentId,
+      })
+
       return
     }
   }

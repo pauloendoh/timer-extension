@@ -1,9 +1,12 @@
 import { VoteCount } from './types/types'
 import { messageTypes } from './utils/messageTypes'
 
+let currentComment: HTMLElement | null = null
+
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   console.log({
     sender,
+    msg,
   })
   if (msg.type === messageTypes.getHighestVotes) {
     console.log('listening')
@@ -40,11 +43,25 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   }
 
   if (msg.type === messageTypes.scrollToComment) {
-    const url = new URL(msg.url)
-    const commentId = url.hash.replace('#', '')
-    const comment = document.getElementById(commentId)
+    const commentId = msg.commentId
+    console.log({
+      commentId,
+    })
+    const comment = document
+      .getElementById(commentId)
+      ?.querySelector('.timeline-comment') as HTMLElement | null
     if (comment) {
-      comment.scrollIntoView()
+      if (currentComment) {
+        currentComment.style.border = 'none'
+      }
+      currentComment = comment
+      comment.style.border = '4px solid #8957e5'
+
+      const y = comment.getBoundingClientRect().top + window.scrollY
+      window.scrollTo({
+        top: y - 200,
+        behavior: 'smooth',
+      })
     }
     sendResponse('Scroll to comment')
     return

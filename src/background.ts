@@ -61,7 +61,11 @@ chrome.commands.onCommand.addListener(function (command, tab) {
       currentVoteCountIndex,
     })
 
-    const voteCount = voteCounts[currentVoteCountIndex]
+    let voteCount = voteCounts[currentVoteCountIndex]
+    if (!voteCount) {
+      currentVoteCountIndex === 0
+      voteCount = voteCounts[currentVoteCountIndex]
+    }
     if (
       voteCount &&
       currentUrl.includes('github.com') &&

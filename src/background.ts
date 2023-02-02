@@ -8,19 +8,23 @@ function polling() {
 
 polling()
 
+let prevIssuesUrl = ''
 let voteCounts: VoteCount[] = []
 let currentVoteCountIndex = -1
 let started = false
 
-// listen to new url open
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+const getHighestVotes = (tab: chrome.tabs.Tab) => {
   const currentUrl = tab.url
 
-  if (!tabId || !currentUrl) return
+  console.log({
+    tabId: tab.id,
+    currentUrl,
+  })
+  if (!tab?.id || !currentUrl) return
 
   if (currentUrl.includes('github.com') && currentUrl.includes('/issues/')) {
     chrome.tabs.sendMessage(
-      tabId,
+      tab.id,
       {
         type: messageTypes.getHighestVotes,
       },
@@ -40,13 +44,15 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   started = false
   voteCounts = []
   currentVoteCountIndex = -1
-})
+}
 
 chrome.commands.onCommand.addListener(function (command, tab) {
+  if (tab.url !== prevIssuesUrl) {
+    getHighestVotes(tab)
+  }
+
   console.log(command)
   if (command === 'next' || command === 'prev') {
-    // open popup html
-
     const currentUrl = tab.url
 
     const tabId = tab.id
@@ -56,6 +62,9 @@ chrome.commands.onCommand.addListener(function (command, tab) {
     if (command === 'prev' && currentVoteCountIndex > 0) currentVoteCountIndex--
     if (command === 'next' && currentVoteCountIndex < voteCounts.length - 1)
       currentVoteCountIndex++
+
+    if (currentVoteCountIndex < 0) currentVoteCountIndex = 0
+
     console.log({
       voteCounts,
       currentVoteCountIndex,

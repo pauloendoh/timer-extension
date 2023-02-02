@@ -38,7 +38,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       })
     }
 
-    sendResponse(results.sort((a, b) => b.voteCount - a.voteCount))
+    sendResponse(
+      results
+        .filter((result) => result.voteCount > 0)
+        .sort((a, b) => b.voteCount - a.voteCount)
+    )
     return
   }
 

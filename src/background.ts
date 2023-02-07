@@ -13,6 +13,16 @@ let voteCounts: VoteCount[] = []
 let currentVoteCountIndex = -1
 let started = false
 
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  chrome.tabs.get(activeInfo.tabId, (tab) => {
+    console.log('URL: ', tab.url)
+  })
+})
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log('URL: ', tab.url)
+})
+
 const getHighestVotes = (tab: chrome.tabs.Tab) => {
   const currentUrl = tab.url
 

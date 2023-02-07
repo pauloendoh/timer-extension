@@ -1,3 +1,4 @@
-const storageKeys = {
+export const storageKeys = {
   voteCounts: 'voteCounts',
+  user: 'user',
 }

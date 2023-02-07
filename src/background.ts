@@ -1,4 +1,5 @@
 import { VoteCount } from './types/types'
+import { getCurrentTab } from './utils/getCurrentTab'
 import { messageTypes } from './utils/messageTypes'
 
 function polling() {
@@ -20,6 +21,17 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log('URL: ', tab.url)
+})
+
+// listen to focused windows tab
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId === chrome.windows.WINDOW_ID_NONE) {
+    // No window is focused. All Chrome windows are blurred.
+    return
+  }
+
+  const tab = await getCurrentTab()
   console.log('URL: ', tab.url)
 })
 

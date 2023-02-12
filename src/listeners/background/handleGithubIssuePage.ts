@@ -23,16 +23,13 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
   if (!tab?.id || !currentUrl) return
 
   if (currentUrl.includes('github.com') && currentUrl.includes('/issues/')) {
-    console.log('trying sending message')
     chrome.tabs.sendMessage(
       tab.id,
       {
         type: messageTypes.getHighestVotes,
       },
       (response: VoteCount[]) => {
-        console.log({
-          response,
-        })
+        if (!response) return
         if (response.length > 0) {
           const newState: IssuesState = {
             voteCounts: response,
@@ -40,9 +37,6 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
             started: true,
             prevIssuesUrl: currentUrl,
           }
-          console.log('reached', {
-            newState,
-          })
 
           syncSet(storageKeys.issues, newState)
         }

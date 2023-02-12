@@ -39,8 +39,6 @@ export const handleGithubIssuesCommand = async (
     })
   }
 
-  console.log(state)
-
   let voteCount = state.voteCounts[state.currentVoteCountIndex]
   if (!voteCount) {
     state.currentVoteCountIndex === 0
@@ -51,9 +49,6 @@ export const handleGithubIssuesCommand = async (
     currentUrl.includes('github.com') &&
     currentUrl.includes('/issues/')
   ) {
-    const startUrl = currentUrl.split('#')[0]
-
-    console.log('sending', voteCount.commentId)
     chrome.tabs.sendMessage(tabId, {
       type: messageTypes.scrollToComment,
       commentId: voteCount.commentId,

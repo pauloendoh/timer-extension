@@ -15,7 +15,7 @@ const useCheckAuthOrLogout = () => {
   const setAuthUser = useAuthStore((s) => s.setAuthUser)
 
   const checkAuthOrLogout = async () => {
-    const user: AuthUserGetDto = await syncGet(storageKeys.user)
+    const user = await syncGet<AuthUserGetDto>(storageKeys.user)
 
     if (!user) {
       return setLoading(false)

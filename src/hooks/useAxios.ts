@@ -12,7 +12,7 @@ export const useAxios = (params?: { redirectOn401?: boolean }) => {
   // localAxios.defaults.baseURL = process.env.REACT_APP_API_URL
 
   localAxios.interceptors.request.use(async (config) => {
-    const user: AuthUserGetDto = await syncGet(storageKeys.user)
+    const user = await syncGet<AuthUserGetDto>(storageKeys.user)
     if (user) config.headers['x-auth-token'] = user.token
     return config
   })

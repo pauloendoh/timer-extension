@@ -3,6 +3,8 @@ import { messageTypes } from './utils/messageTypes'
 
 let currentComment: HTMLElement | null = null
 
+console.log('content script ')
+
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   console.log({
     sender,

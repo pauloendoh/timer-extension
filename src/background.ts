@@ -5,6 +5,13 @@ import { syncSet } from './utils/chromeStoragePromises'
 import { getCurrentTab } from './utils/getCurrentTab'
 import { storageKeys } from './utils/storageKeys'
 
+function polling() {
+  console.log('polling')
+  setTimeout(polling, 1000 * 30)
+}
+
+polling()
+
 syncSet(storageKeys.issues, {
   currentVoteCountIndex: 0,
   voteCounts: [],
@@ -13,6 +20,7 @@ syncSet(storageKeys.issues, {
 } as IssuesState)
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
+  console.log('Ronaldo')
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     handleTab(tab)
   })
@@ -36,3 +44,19 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 chrome.commands.onCommand.addListener(function (command, tab) {
   handleCommand(command, tab)
 })
+
+// background.js
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+  console.log('wake me up')
+})
+
+chrome.webRequest.onSendHeaders.addListener(
+  (details) => {
+    // code here
+  },
+  {
+    urls: ['https://example.com/api/*'],
+    types: ['xmlhttprequest'],
+  },
+  ['requestHeaders']
+)

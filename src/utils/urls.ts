@@ -5,5 +5,7 @@ export const urls = {
     auth: {
       login: relearn + '/auth/login',
     },
+    alreadySavedResource: (url: string) =>
+      relearn + `/already-saved-resource?url=${encodeURIComponent(url)}`,
   },
 }

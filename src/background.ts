@@ -44,19 +44,3 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 chrome.commands.onCommand.addListener(function (command, tab) {
   handleCommand(command, tab)
 })
-
-// background.js
-chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-  console.log('wake me up')
-})
-
-chrome.webRequest.onSendHeaders.addListener(
-  (details) => {
-    // code here
-  },
-  {
-    urls: ['https://example.com/api/*'],
-    types: ['xmlhttprequest'],
-  },
-  ['requestHeaders']
-)

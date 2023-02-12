@@ -13,7 +13,7 @@ export const useAxios = (params?: { redirectOn401?: boolean }) => {
 
   localAxios.interceptors.request.use(async (config) => {
     const user = await syncGet<AuthUserGetDto>(storageKeys.user)
-    if (user) config.headers['x-auth-token'] = user.token
+    if (user && config.headers) config.headers['x-auth-token'] = user.token
     return config
   })
 

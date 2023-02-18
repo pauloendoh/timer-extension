@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AuthUserGetDto } from '../types/domains/AuthUserGetDto'
-import { syncGet } from '../utils/chromeStoragePromises'
+import { getSync } from '../utils/chromeStoragePromises'
 import { storageKeys } from '../utils/storageKeys'
 
 import { useLogout } from './useLogout'
@@ -15,7 +15,7 @@ const useCheckAuthOrLogout = () => {
   const setAuthUser = useAuthStore((s) => s.setAuthUser)
 
   const checkAuthOrLogout = async () => {
-    const user = await syncGet<AuthUserGetDto>(storageKeys.user)
+    const user = await getSync<AuthUserGetDto>(storageKeys.user)
 
     if (!user) {
       return setLoading(false)

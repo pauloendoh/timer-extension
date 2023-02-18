@@ -1,7 +1,7 @@
 // promise wrapper on chrome.storage.sync.get
 
-export const syncGet = <T>(key: string) => {
-  return new Promise<T | null>((resolve, reject) => {
+export const getSync = <T>(key: string) => {
+  return new Promise<T | undefined>((resolve, reject) => {
     chrome.storage.sync.get(key, (result) => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError)
@@ -13,7 +13,7 @@ export const syncGet = <T>(key: string) => {
 }
 
 // sync set
-export const syncSet = <T>(key: string, value: T) => {
+export const setSync = <T>(key: string, value: T) => {
   return new Promise<T>((resolve, reject) => {
     chrome.storage.sync.set({ [key]: value }, () => {
       if (chrome.runtime.lastError) {
@@ -26,7 +26,7 @@ export const syncSet = <T>(key: string, value: T) => {
 }
 
 // sync remove
-export const syncRemove = (key: string) => {
+export const removeSync = (key: string) => {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.remove(key, () => {
       if (chrome.runtime.lastError) {

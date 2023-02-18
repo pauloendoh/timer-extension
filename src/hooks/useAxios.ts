@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ValidationError } from 'class-validator'
 import { AuthUserGetDto } from '../types/domains/AuthUserGetDto'
 import { myNotifications } from '../types/myNotifications'
-import { syncGet } from '../utils/chromeStoragePromises'
+import { getSync } from '../utils/chromeStoragePromises'
 import { storageKeys } from '../utils/storageKeys'
 
 export const useAxios = (params?: { redirectOn401?: boolean }) => {
@@ -12,7 +12,7 @@ export const useAxios = (params?: { redirectOn401?: boolean }) => {
   // localAxios.defaults.baseURL = process.env.REACT_APP_API_URL
 
   localAxios.interceptors.request.use(async (config) => {
-    const user = await syncGet<AuthUserGetDto>(storageKeys.user)
+    const user = await getSync<AuthUserGetDto>(storageKeys.user)
     if (user && config.headers) config.headers['x-auth-token'] = user.token
     return config
   })

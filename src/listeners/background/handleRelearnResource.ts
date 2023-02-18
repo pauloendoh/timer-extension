@@ -6,7 +6,6 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
   const url = tab.url
   if (!url) return
 
-  console.log('XD')
   myFetch(urls.api.alreadySavedResource(url))
     .then((res) => res.json())
     .then((data: AlreadyRatedResourceDto) => {

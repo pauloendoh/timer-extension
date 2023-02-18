@@ -1,4 +1,4 @@
-import { syncGet, syncSet } from '../../utils/chromeStoragePromises'
+import { getSync, setSync } from '../../utils/chromeStoragePromises'
 import { messageTypes } from '../../utils/messageTypes'
 import { storageKeys } from '../../utils/storageKeys'
 import { IssuesState } from '../background/handleGithubIssuePage'
@@ -13,11 +13,11 @@ export const handleGithubIssuesCommand = async (
 
   if (!tabId || !currentUrl) return
 
-  let state = await syncGet<IssuesState>(storageKeys.issues)
+  let state = await getSync<IssuesState>(storageKeys.issues)
   if (!state) return
 
   if (command === 'prev' && state.currentVoteCountIndex > 0) {
-    state = await syncSet(storageKeys.issues, {
+    state = await setSync(storageKeys.issues, {
       ...state,
       currentVoteCountIndex: state.currentVoteCountIndex - 1,
     })
@@ -27,13 +27,13 @@ export const handleGithubIssuesCommand = async (
     command === 'next' &&
     state.currentVoteCountIndex < state.voteCounts.length - 1
   )
-    state = await syncSet(storageKeys.issues, {
+    state = await setSync(storageKeys.issues, {
       ...state,
       currentVoteCountIndex: state.currentVoteCountIndex + 1,
     })
 
   if (state.currentVoteCountIndex < 0) {
-    state = await syncSet(storageKeys.issues, {
+    state = await setSync(storageKeys.issues, {
       ...state,
       currentVoteCountIndex: 0,
     })

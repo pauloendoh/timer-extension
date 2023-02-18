@@ -1,18 +1,17 @@
 import { IssuesState } from './listeners/background/handleGithubIssuePage'
 import { handleTab } from './listeners/background/handleTab'
 import { handleCommand } from './listeners/shortcutCommands/handleCommand'
-import { syncSet } from './utils/chromeStoragePromises'
+import { setSync } from './utils/chromeStoragePromises'
 import { getCurrentTab } from './utils/getCurrentTab'
 import { storageKeys } from './utils/storageKeys'
 
 function polling() {
-  console.log('polling')
   setTimeout(polling, 1000 * 30)
 }
 
 polling()
 
-syncSet(storageKeys.issues, {
+setSync(storageKeys.issues, {
   currentVoteCountIndex: 0,
   voteCounts: [],
   prevIssuesUrl: '',
@@ -20,7 +19,6 @@ syncSet(storageKeys.issues, {
 } as IssuesState)
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
-  console.log('Ronaldo')
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     handleTab(tab)
   })

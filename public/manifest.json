@@ -29,15 +29,15 @@
 
   "host_permissions": ["<all_urls>"],
   "commands": {
-    "next": {
+    "nextIssue": {
       "suggested_key": {
-        "default": "Ctrl+Down"
+        "default": "Ctrl+L"
       },
       "description": "Go to next most liked"
     },
-    "prev": {
+    "prevIssue": {
       "suggested_key": {
-        "default": "Ctrl+Up"
+        "default": "Ctrl+K"
       },
       "description": "Go to previous most liked"
     }

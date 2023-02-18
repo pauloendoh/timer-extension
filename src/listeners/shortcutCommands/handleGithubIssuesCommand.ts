@@ -16,7 +16,7 @@ export const handleGithubIssuesCommand = async (
   let state = await getSync<IssuesState>(storageKeys.issues)
   if (!state) return
 
-  if (command === 'prev' && state.currentVoteCountIndex > 0) {
+  if (command === 'prevIssue' && state.currentVoteCountIndex > 0) {
     state = await setSync(storageKeys.issues, {
       ...state,
       currentVoteCountIndex: state.currentVoteCountIndex - 1,
@@ -24,7 +24,7 @@ export const handleGithubIssuesCommand = async (
   }
 
   if (
-    command === 'next' &&
+    command === 'nextIssue' &&
     state.currentVoteCountIndex < state.voteCounts.length - 1
   )
     state = await setSync(storageKeys.issues, {

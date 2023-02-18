@@ -11,6 +11,8 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     let likeCount = 0
     let loveCount = 0
     let hoorayCount = 0
+    let rocketCount = 0
+    let smileCount = 0
     let sadCount = 0
     let dislikeCount = 0
 
@@ -41,6 +43,22 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
       if (number) hoorayCount = number
     }
 
+    const rocketCountHtml = reactions.querySelector(
+      '[aria-label="react with rocket]'
+    )
+    if (rocketCountHtml && rocketCountHtml.textContent) {
+      const number = parseInt(rocketCountHtml.textContent.split(`\n`)[1])
+      if (number) rocketCount = number
+    }
+
+    const smileCountHtml = reactions.querySelector(
+      '[aria-label="react with smile"]'
+    )
+    if (smileCountHtml && smileCountHtml.textContent) {
+      const number = parseInt(smileCountHtml.textContent.split(`\n`)[1])
+      if (number) smileCount = number
+    }
+
     const sadCountHtml = reactions.querySelector(
       '[aria-label="react with confused"]'
     )
@@ -58,7 +76,13 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     }
 
     const voteCount =
-      likeCount + loveCount * 2 + hoorayCount * 2 - sadCount - dislikeCount
+      likeCount +
+      loveCount * 2 +
+      hoorayCount * 2 -
+      sadCount -
+      dislikeCount +
+      rocketCount * 2 +
+      smileCount * 1
 
     results.push({
       commentId: id,

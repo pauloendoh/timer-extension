@@ -1,6 +1,6 @@
 import { IssuesState } from './listeners/background/handleGithubIssuePage'
 import { handleTab } from './listeners/background/handleTab'
-import { handleCommand } from './listeners/shortcutCommands/handleCommand'
+import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
 import { setSync } from './utils/chromeStoragePromises'
 import { getCurrentTab } from './utils/getCurrentTab'
 import { storageKeys } from './utils/storageKeys'
@@ -40,5 +40,5 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 })
 
 chrome.commands.onCommand.addListener(function (command, tab) {
-  handleCommand(command, tab)
+  bgHandleCommand(command, tab)
 })

@@ -90,10 +90,10 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     })
   }
 
-  sendResponse(
-    results
-      .filter((result) => result.voteCount > 0)
-      .sort((a, b) => b.voteCount - a.voteCount)
-  )
+  const finalResults = results
+    .filter((result) => result.voteCount > 0)
+    .sort((a, b) => b.voteCount - a.voteCount)
+
+  sendResponse(finalResults)
   return
 }

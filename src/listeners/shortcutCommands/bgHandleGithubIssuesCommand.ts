@@ -3,7 +3,7 @@ import { messageTypes } from '../../utils/messageTypes'
 import { storageKeys } from '../../utils/storageKeys'
 import { IssuesState } from '../background/handleGithubIssuePage'
 
-export const handleGithubIssuesCommand = async (
+export const bgHandleGithubIssuesCommand = async (
   command: string,
   tab: chrome.tabs.Tab
 ) => {
@@ -14,7 +14,15 @@ export const handleGithubIssuesCommand = async (
   if (!tabId || !currentUrl) return
 
   let state = await getSync<IssuesState>(storageKeys.issues)
-  if (!state) return
+  if (!state || state.voteCounts.length === 0) {
+    // send alert to content_script
+    chrome.tabs.sendMessage(tabId, {
+      type: messageTypes.alert,
+      message: 'No votes found',
+    })
+
+    return
+  }
 
   if (command === 'prevIssue' && state.currentVoteCountIndex > 0) {
     state = await setSync(storageKeys.issues, {

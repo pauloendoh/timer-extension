@@ -30,4 +30,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     sendResponse('Scroll to comment')
     return
   }
+
+  if (msg.type === messageTypes.alert) {
+    alert(msg.message)
+  }
 })

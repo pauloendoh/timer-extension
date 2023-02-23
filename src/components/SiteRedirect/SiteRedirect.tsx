@@ -6,7 +6,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdClose } from 'react-icons/md'
 import { useChromeStorageSync } from 'use-chrome-storage'
 import { IRedirectItem } from '../../types/domains/redirect/IRedirectItem'
@@ -23,6 +23,15 @@ const SiteRedirect = (props: Props) => {
     storageKeys.siteRedirect.isActive,
     false
   )
+
+  useEffect(() => {
+    chrome.action.setBadgeText({
+      text: isActive ? 'On' : 'Off',
+    })
+    chrome.action.setBadgeBackgroundColor({
+      color: isActive ? '#8957e5' : '#ff0000',
+    })
+  }, [isActive])
 
   // @ts-expect-error
   const [redirectItems, setRedirectItems]: [
@@ -65,11 +74,17 @@ const SiteRedirect = (props: Props) => {
           label={isActive ? 'On' : 'Off'}
           checked={isActive}
           onChange={(event) => {
-            setIsActive(event.currentTarget.checked)
-            setSync(
-              storageKeys.siteRedirect.isActive,
-              event.currentTarget.checked
-            )
+            const checked = event.currentTarget.checked
+
+            setIsActive(checked)
+            setSync(storageKeys.siteRedirect.isActive, checked)
+
+            chrome.action.setBadgeText({
+              text: checked ? 'On' : 'Off',
+            })
+            chrome.action.setBadgeBackgroundColor({
+              color: checked ? '#8957e5' : '#ff0000',
+            })
           }}
         />
       </FlexVCenter>

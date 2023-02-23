@@ -1,3 +1,4 @@
+import { handleBadgeAsync } from './listeners/background/handleBadge'
 import { IssuesState } from './listeners/background/handleGithubIssuePage'
 import { handleTab } from './listeners/background/handleTab'
 import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
@@ -18,10 +19,12 @@ setSync(storageKeys.issues, {
   started: false,
 } as IssuesState)
 
-chrome.tabs.onActivated.addListener((activeInfo) => {
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     handleTab(tab)
   })
+
+  handleBadgeAsync()
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

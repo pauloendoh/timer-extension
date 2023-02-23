@@ -1,4 +1,5 @@
 import { AlreadyRatedResourceDto } from '../../types/domains/resources/AlreadyRatedResourceDto'
+import { messageTypes } from '../../utils/messageTypes'
 import { myFetch } from '../../utils/myFetch'
 import { urls } from '../../utils/urls'
 
@@ -10,22 +11,12 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
     .then((res) => res.json())
     .then((data: AlreadyRatedResourceDto) => {
       if (data.resource) {
-        chrome.action.setBadgeBackgroundColor({
-          tabId: tab.id,
-          color: 'yellow',
-        })
+        if (!tab.id) return
 
-        if (data.resource.rating) {
-          chrome.action.setBadgeText({
-            tabId: tab.id,
-            text: data.resource.rating.toString(),
-          })
-          return
-        }
-
-        chrome.action.setBadgeText({
-          tabId: tab.id,
-          text: '🤔',
+        // send message
+        chrome.tabs.sendMessage(tab.id, {
+          type: messageTypes.handleResource,
+          resource: data.resource,
         })
       }
     })

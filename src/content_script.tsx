@@ -1,4 +1,5 @@
 import { getHighestVotes } from './listeners/content_script/github-issues/getHighestVotes'
+import { bgHandleResource } from './listeners/content_script/relearn/bgHandleResource'
 import { messageTypes } from './utils/messageTypes'
 
 let currentComment: HTMLElement | null = null
@@ -33,5 +34,9 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
   if (msg.type === messageTypes.alert) {
     alert(msg.message)
+  }
+
+  if (msg.type === messageTypes.handleResource) {
+    bgHandleResource(msg.resource)
   }
 })

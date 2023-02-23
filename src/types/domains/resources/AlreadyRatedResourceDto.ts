@@ -1,9 +1,9 @@
 export interface AlreadyRatedResourceDto {
   found: boolean
-  resource: Resource | null
+  resource: ResourceDto | null
 }
 
-interface Resource {
+export interface ResourceDto {
   id: number
   userId: number
   title: string

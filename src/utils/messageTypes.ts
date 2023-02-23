@@ -4,4 +4,6 @@ export const messageTypes = {
   alert: 'alert',
 
   redirectToUrl: 'redirectToUrl',
+
+  handleResource: 'handleResource',
 }

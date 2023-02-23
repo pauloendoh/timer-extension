@@ -2,7 +2,9 @@ import {
   ActionIcon,
   Box,
   Button,
+  Flex,
   Switch,
+  Text,
   TextInput,
   Title,
 } from '@mantine/core'
@@ -97,12 +99,24 @@ const SiteRedirect = (props: Props) => {
       <FlexCol mt={24}>
         {redirectItems.map((redirectItem) => {
           return (
-            <FlexVCenter key={redirectItem.uuid}>
-              <ActionIcon onClick={() => handleRemove(redirectItem.uuid)}>
+            <Flex key={redirectItem.uuid} gap={8}>
+              <ActionIcon
+                onClick={() => handleRemove(redirectItem.uuid)}
+                sx={(theme) => ({
+                  ':hover': {
+                    background: theme.colors.dark[3],
+                  },
+                })}
+              >
                 <MdClose />
               </ActionIcon>
-              {redirectItem.urlIncludes} {'->'} {redirectItem.redirectTo}
-            </FlexVCenter>
+              <Text>
+                {redirectItem.urlIncludes} {'->'}{' '}
+                <Text truncate title={redirectItem.redirectTo}>
+                  {redirectItem.redirectTo}
+                </Text>
+              </Text>
+            </Flex>
           )
         })}
       </FlexCol>

@@ -7,6 +7,7 @@ import SiteRedirect from './components/SiteRedirect/SiteRedirect'
 import useCheckAuthOrLogout from './hooks/useCheckAuthUserOrLogout'
 import { useLogout } from './hooks/useLogout'
 import useAuthStore from './hooks/zustand/useAuthStore'
+import { myTheme } from './utils/myTheme'
 
 const Popup = () => {
   const { checkAuthOrLogout, loading } = useCheckAuthOrLogout()
@@ -36,7 +37,10 @@ ReactDOM.render(
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      theme={{ colorScheme: 'dark' }}
+      theme={{
+        ...myTheme,
+        colorScheme: 'dark',
+      }}
     >
       <NotificationsProvider>
         <Popup />

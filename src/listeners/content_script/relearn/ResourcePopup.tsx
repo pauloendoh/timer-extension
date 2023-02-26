@@ -4,6 +4,7 @@ import { FaFire } from 'react-icons/fa'
 import { format } from 'timeago.js'
 import { FlexVCenter } from '../../../components/_UI/boxes/FlexVCenter'
 import { ResourceDto } from '../../../types/domains/resources/AlreadyRatedResourceDto'
+import { ratingLabels } from './ratingLabels/ratingLabels'
 
 type Props = {
   resource: ResourceDto
@@ -25,14 +26,16 @@ const ResourcePopup = (props: Props) => {
     }
 
     const ratedAt = format(props.resource.completedAt)
-    return `${props.resource.rating}/5 (${ratedAt})`
+    return `${props.resource.rating}/5 - ${
+      ratingLabels[props.resource.rating]
+    } (${ratedAt})`
   }, [props.resource.rating])
 
   return (
     <Paper p={8} bg={bgColor}>
       <FlexVCenter gap={4}>
         <FaFire />
-        <Text>{label}</Text>
+        <Text sx={{ fontSize: 14 }}>{label}</Text>
       </FlexVCenter>
     </Paper>
   )

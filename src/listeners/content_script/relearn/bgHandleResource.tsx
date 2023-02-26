@@ -14,7 +14,12 @@ export const bgHandleResource = (resource: ResourceDto) => {
   const div = document.createElement('div')
   div.id = 'endoh-extension'
 
-  document.body.append(div)
+  const root = document.getElementById('root')
+  if (root) {
+    root.append(div)
+  } else {
+    document.body.append(div)
+  }
 
   ReactDOM.render(
     <React.StrictMode>

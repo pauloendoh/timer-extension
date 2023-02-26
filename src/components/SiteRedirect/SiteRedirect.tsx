@@ -65,6 +65,7 @@ const SiteRedirect = (props: Props) => {
       <FlexVCenter align={'center'} justify="space-between">
         <Title order={4}>Site Redirect</Title>
         <Switch
+          color="secondary"
           label={isActive ? 'On' : 'Off'}
           checked={isActive}
           onChange={(event) => {

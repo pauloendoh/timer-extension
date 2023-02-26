@@ -10,14 +10,23 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
   myFetch(urls.api.alreadySavedResource(url))
     .then((res) => res.json())
     .then((data: AlreadyRatedResourceDto) => {
-      if (data.resource) {
-        if (!tab.id) return
+      if (!tab.id) return
 
+      console.log({
+        data,
+      })
+      if (data.resource) {
         // send message
         chrome.tabs.sendMessage(tab.id, {
           type: messageTypes.handleResource,
           resource: data.resource,
         })
+
+        return
       }
+
+      chrome.tabs.sendMessage(tab.id, {
+        type: messageTypes.hideRelearnButton,
+      })
     })
 }

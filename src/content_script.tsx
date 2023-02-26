@@ -1,5 +1,6 @@
 import { getHighestVotes } from './listeners/content_script/github-issues/getHighestVotes'
-import { bgHandleResource } from './listeners/content_script/relearn/bgHandleResource'
+import { csHandleResource } from './listeners/content_script/relearn/csHandleResource'
+import { csHideRelearnButton } from './listeners/content_script/relearn/csHideRelearnButton'
 import { messageTypes } from './utils/messageTypes'
 
 let currentComment: HTMLElement | null = null
@@ -37,6 +38,10 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   }
 
   if (msg.type === messageTypes.handleResource) {
-    bgHandleResource(msg.resource)
+    csHandleResource(msg.resource)
+  }
+
+  if (msg.type === messageTypes.hideRelearnButton) {
+    csHideRelearnButton()
   }
 })

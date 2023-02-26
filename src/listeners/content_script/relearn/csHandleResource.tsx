@@ -5,7 +5,7 @@ import { ResourceDto } from '../../../types/domains/resources/AlreadyRatedResour
 import { myTheme } from '../../../utils/myTheme'
 import ResourcePopup from './ResourcePopup'
 
-export const bgHandleResource = (resource: ResourceDto) => {
+export const csHandleResource = (resource: ResourceDto) => {
   const existingDiv = document.getElementById('endoh-extension')
   if (existingDiv) {
     existingDiv.remove()

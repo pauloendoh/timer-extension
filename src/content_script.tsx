@@ -7,6 +7,7 @@ let currentComment: HTMLElement | null = null
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.type === messageTypes.getHighestVotes) {
+    console.log('Starting getHighestVotes')
     return getHighestVotes(sendResponse)
   }
 

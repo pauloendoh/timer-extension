@@ -8,8 +8,10 @@ const unregister = fetchIntercept.register({
   request: async function (url, config) {
     const user = await getSync<AuthUserGetDto>(storageKeys.user)
     if (user) {
-      if (!config) config = { headers: {} }
+      if (!config || !config.headers) config = { headers: {} }
       config.headers['x-auth-token'] = user.token
+      // Keep-Alive
+      config.headers['Connection'] = 'keep-alive'
     }
     return [url, config]
   },

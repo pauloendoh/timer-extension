@@ -84,6 +84,10 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
       rocketCount * 2 +
       smileCount * 1
 
+    console.log({
+      voteCount,
+    })
+
     results.push({
       commentId: id,
       voteCount,

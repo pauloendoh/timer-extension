@@ -3,10 +3,15 @@ import { messageTypes } from '../../utils/messageTypes'
 import { myFetch } from '../../utils/myFetch'
 import { urls } from '../../utils/urls'
 
+let loadingUrls: string[] = []
+
 export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
   const url = tab.url
   if (!url) return
 
+  if (loadingUrls.includes(url)) return
+
+  loadingUrls.push(url)
   myFetch(urls.api.alreadySavedResource(url))
     .then((res) => res.json())
     .then((data: AlreadyRatedResourceDto) => {
@@ -28,5 +33,8 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
       chrome.tabs.sendMessage(tab.id, {
         type: messageTypes.hideRelearnButton,
       })
+    })
+    .finally(() => {
+      loadingUrls = loadingUrls.filter((u) => u !== url)
     })
 }

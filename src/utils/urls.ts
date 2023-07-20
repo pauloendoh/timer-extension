@@ -7,5 +7,8 @@ export const urls = {
     },
     alreadySavedResource: (url: string) =>
       relearn + `/already-saved-resource?url=${encodeURIComponent(url)}`,
+    relearn: {
+      resource: relearn + '/relearn/resource',
+    },
   },
 }

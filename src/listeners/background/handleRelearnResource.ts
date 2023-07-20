@@ -25,6 +25,7 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
         chrome.tabs.sendMessage(tab.id, {
           type: messageTypes.handleResource,
           resource: data.resource,
+          tabId: tab.id,
         })
 
         return

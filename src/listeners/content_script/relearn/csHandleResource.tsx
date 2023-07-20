@@ -1,11 +1,16 @@
 import { MantineProvider } from '@mantine/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ResourceDto } from '../../../types/domains/resources/AlreadyRatedResourceDto'
+import { ResourceDto } from '../../../types/domains/resources/ResourceDto'
 import { myTheme } from '../../../utils/myTheme'
+import GlobalDialogs from './GlobalModals/GlobalModals'
+import RelearnContext from './RelearnContext/RelearnContext'
 import ResourcePopup from './ResourcePopup'
 
-export const csHandleResource = (resource: ResourceDto) => {
+export const csHandleResource = (
+  initialResource: ResourceDto,
+  tabId: number
+) => {
   const existingDiv = document.getElementById('endoh-extension')
   if (existingDiv) {
     existingDiv.remove()
@@ -23,23 +28,32 @@ export const csHandleResource = (resource: ResourceDto) => {
 
   ReactDOM.render(
     <React.StrictMode>
-      <MantineProvider
-        theme={{
-          ...myTheme,
-          colorScheme: 'dark',
+      <RelearnContext.Provider
+        value={{
+          tabId,
         }}
       >
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            ...myTheme,
+            colorScheme: 'dark',
           }}
         >
-          <ResourcePopup resource={resource} />
-        </div>
-      </MantineProvider>
+          <div
+            style={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 1000,
+            }}
+          >
+            <ResourcePopup initialResource={initialResource} />
+          </div>
+          <GlobalDialogs />
+        </MantineProvider>
+      </RelearnContext.Provider>
     </React.StrictMode>,
     div
   )

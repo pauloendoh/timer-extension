@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   }
 
   if (msg.type === messageTypes.handleResource) {
-    csHandleResource(msg.resource)
+    csHandleResource(msg.resource, msg.tabId)
   }
 
   if (msg.type === messageTypes.hideRelearnButton) {

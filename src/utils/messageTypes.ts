@@ -5,7 +5,7 @@ export const messageTypes = {
 
   redirectToUrl: 'redirectToUrl',
 
+  // PE 1/3 - improve name?
   handleResource: 'handleResource',
-
   hideRelearnButton: 'hideRelearnButton',
 }

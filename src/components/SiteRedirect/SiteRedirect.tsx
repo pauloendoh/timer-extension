@@ -14,7 +14,7 @@ import { useChromeStorageSync } from 'use-chrome-storage'
 import { handleBadgeAsync } from '../../listeners/background/handleBadge'
 import { IRedirectItem } from '../../types/domains/redirect/IRedirectItem'
 import { setSync } from '../../utils/chromeStoragePromises'
-import { storageKeys } from '../../utils/storageKeys'
+import { syncKeys } from '../../utils/syncKeys'
 import { FlexCol } from '../_UI/boxes/FlexCol'
 import { FlexVCenter } from '../_UI/boxes/FlexVCenter'
 
@@ -23,7 +23,7 @@ type Props = {}
 const SiteRedirect = (props: Props) => {
   // @ts-expect-error
   const [isActive, setIsActive, isPersistent, error] = useChromeStorageSync(
-    storageKeys.siteRedirect.isActive,
+    syncKeys.siteRedirect.isActive,
     false
   )
 
@@ -32,7 +32,7 @@ const SiteRedirect = (props: Props) => {
     redirectItems: IRedirectItem[],
     setRedirectItems: (redirectItems: IRedirectItem[]) => void
   ] = useChromeStorageSync<IRedirectItem[]>(
-    storageKeys.siteRedirect.redirectItems,
+    syncKeys.siteRedirect.redirectItems,
     []
   )
 
@@ -72,7 +72,7 @@ const SiteRedirect = (props: Props) => {
             const checked = event.currentTarget.checked
 
             setIsActive(checked)
-            setSync(storageKeys.siteRedirect.isActive, checked)
+            setSync(syncKeys.siteRedirect.isActive, checked)
 
             handleBadgeAsync()
           }}

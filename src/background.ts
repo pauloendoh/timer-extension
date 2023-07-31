@@ -1,10 +1,11 @@
+import { background_handleTab } from './listeners/background/background_handleTab'
 import { handleBadgeAsync } from './listeners/background/handleBadge'
 import { IssuesState } from './listeners/background/handleGithubIssuePage'
-import { handleTab } from './listeners/background/handleTab'
 import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
 import { setSync } from './utils/chromeStoragePromises'
 import { getCurrentTab } from './utils/getCurrentTab'
-import { storageKeys } from './utils/storageKeys'
+import { messageTypes } from './utils/messageTypes'
+import { syncKeys } from './utils/syncKeys'
 
 function polling() {
   setTimeout(polling, 1000 * 30)
@@ -12,7 +13,7 @@ function polling() {
 
 polling()
 
-setSync(storageKeys.issues, {
+setSync(syncKeys.issues, {
   currentVoteCountIndex: 0,
   voteCounts: [],
   prevIssuesUrl: '',
@@ -21,14 +22,16 @@ setSync(storageKeys.issues, {
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
-    handleTab(tab)
+    background_handleTab(tab)
   })
 
   handleBadgeAsync()
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  handleTab(tab)
+  background_handleTab(tab, {
+    type: 'open',
+  })
 })
 
 // listen to focused windows tab
@@ -37,11 +40,43 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
     // No window is focused. All Chrome windows are blurred.
     return
   }
-
   const tab = await getCurrentTab()
-  handleTab(tab)
+  background_handleTab(tab)
 })
 
 chrome.commands.onCommand.addListener(function (command, tab) {
   bgHandleCommand(command, tab)
+})
+
+chrome.runtime.onInstalled.addListener((details) => {
+  chrome.contextMenus.create({
+    title: 'Toggle link scanning',
+    id: 'relearn-context-menu',
+    contexts: ['page'],
+  })
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (!tab?.id) return
+    if (info.menuItemId === 'relearn-context-menu') {
+      chrome.tabs.sendMessage(tab.id, {
+        type: messageTypes.toggleLinkScan,
+        tabId: tab.id,
+      })
+    }
+  })
+
+  chrome.contextMenus.create({
+    title: 'Save current page',
+    id: 'relearn-save-current-page',
+    contexts: ['page'],
+  })
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (!tab?.id) return
+    if (info.menuItemId === 'relearn-save-current-page') {
+      chrome.tabs.sendMessage(tab.id, {
+        type: messageTypes.saveCurrentPage,
+        tabId: tab.id,
+        url: tab.url,
+      })
+    }
+  })
 })

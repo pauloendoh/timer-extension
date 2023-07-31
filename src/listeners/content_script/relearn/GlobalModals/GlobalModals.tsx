@@ -1,15 +1,16 @@
 import React from 'react'
+import LoadingModal from './LoadingModal/LoadingModal'
 import ResourceModal from './ResourceModal/ResourceModal'
 
 type Props = {}
 
-const GlobalDialogs = ({ ...props }: Props) => {
+const GlobalModals = ({ ...props }: Props) => {
   return (
-    <div className="GlobalDialogs">
-      <div>GlobalDialogs</div>
+    <div className="GlobalModals">
       <ResourceModal />
+      <LoadingModal />
     </div>
   )
 }
 
-export default GlobalDialogs
+export default GlobalModals

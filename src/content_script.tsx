@@ -1,13 +1,16 @@
 import { getHighestVotes } from './listeners/content_script/github-issues/getHighestVotes'
-import { csHandleResource } from './listeners/content_script/relearn/csHandleResource'
+import { content_initReactApp } from './listeners/content_script/relearn/content_initReactApp'
+import { content_saveCurrentPage } from './listeners/content_script/relearn/content_saveCurrentPage'
+import { content_toggleLinkScan } from './listeners/content_script/relearn/content_toggleLinkScan'
 import { csHideRelearnButton } from './listeners/content_script/relearn/csHideRelearnButton'
 import { messageTypes } from './utils/messageTypes'
 
 let currentComment: HTMLElement | null = null
 
+// get runtime tab
+
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.type === messageTypes.getHighestVotes) {
-    console.log('Starting getHighestVotes')
     return getHighestVotes(sendResponse)
   }
 
@@ -38,11 +41,29 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     alert(msg.message)
   }
 
-  if (msg.type === messageTypes.handleResource) {
-    csHandleResource(msg.resource, msg.tabId)
+  if (msg.type === messageTypes.initReactApp) {
+    content_initReactApp(msg.tabId)
+  }
+
+  if (msg.type === messageTypes.foundResource) {
+    window.dispatchEvent(
+      new CustomEvent(messageTypes.foundResource, {
+        detail: {
+          resource: msg.resource,
+        },
+      })
+    )
   }
 
   if (msg.type === messageTypes.hideRelearnButton) {
     csHideRelearnButton()
+  }
+
+  if (msg.type === messageTypes.toggleLinkScan) {
+    content_toggleLinkScan(msg.tabId)
+  }
+
+  if (msg.type === messageTypes.saveCurrentPage) {
+    content_saveCurrentPage(msg.url, msg.tabId)
   }
 })

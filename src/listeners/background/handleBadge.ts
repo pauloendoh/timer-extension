@@ -1,9 +1,9 @@
 import { getSync } from '../../utils/chromeStoragePromises'
-import { storageKeys } from '../../utils/storageKeys'
+import { syncKeys } from '../../utils/syncKeys'
 
 export const handleBadgeAsync = async () => {
   const redirectIsActive = await getSync<boolean>(
-    storageKeys.siteRedirect.isActive
+    syncKeys.siteRedirect.isActive
   )
   chrome.action.setBadgeText({
     text: redirectIsActive ? 'On' : 'Off',

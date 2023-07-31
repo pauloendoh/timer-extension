@@ -1,7 +1,7 @@
 import { VoteCount } from '../../types/types'
 import { getSync, setSync } from '../../utils/chromeStoragePromises'
 import { messageTypes } from '../../utils/messageTypes'
-import { storageKeys } from '../../utils/storageKeys'
+import { syncKeys } from '../../utils/syncKeys'
 
 export type IssuesState = {
   started: boolean
@@ -11,7 +11,7 @@ export type IssuesState = {
 }
 
 export const handleGithubIssuePage = async (tab: chrome.tabs.Tab) => {
-  const state = await getSync<IssuesState>(storageKeys.issues)
+  const state = await getSync<IssuesState>(syncKeys.issues)
   if (tab.url !== state?.prevIssuesUrl) {
     await getHighestVotes(tab)
   }
@@ -38,7 +38,7 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
             prevIssuesUrl: currentUrl,
           }
 
-          setSync(storageKeys.issues, newState)
+          setSync(syncKeys.issues, newState)
         }
       }
     )
@@ -46,7 +46,7 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
     return
   }
 
-  await setSync(storageKeys.issues, {
+  await setSync(syncKeys.issues, {
     started: false,
     voteCounts: [],
     currentVoteCountIndex: -1,

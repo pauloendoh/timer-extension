@@ -16,6 +16,7 @@ import SaveCancelButtons from '../../../../../components/_UI/buttons/SaveCancelB
 import { useAxios } from '../../../../../hooks/useAxios'
 import useResourceModalStore from '../../../../../hooks/zustand/useResourceModalStore'
 import { ResourceDto } from '../../../../../types/domains/resources/ResourceDto'
+import { messageTypes } from '../../../../../utils/messageTypes'
 import { urls } from '../../../../../utils/urls'
 import RelearnContext from '../../RelearnContext/RelearnContext'
 import ResourceModalTitle from './ResourceModalTitle/ResourceModalTitle'
@@ -24,8 +25,10 @@ import ResourceThumbnail from './ResourceThumbnail/ResourceThumbnail'
 type Props = {}
 
 const ResourceModal = ({ ...props }: Props) => {
-  const { initialValue, isOpen, closeModal, setInitialValue } =
+  const { initialValue, isOpen, closeModal, setInitialValue, openModal } =
     useResourceModalStore()
+
+  // PE 1/3 - não ta sendo usado.. remover tudo?
   const { tabId } = React.useContext(RelearnContext)
 
   const [loading, setLoading] = React.useState(false)
@@ -33,6 +36,25 @@ const ResourceModal = ({ ...props }: Props) => {
   const form = useForm<ResourceDto>({
     defaultValues: initialValue,
   })
+
+  useEffect(() => {
+    window.addEventListener(messageTypes.openResourceModal, (event) => {
+      console.log({
+        event,
+      })
+      const detail = (event as CustomEvent).detail
+      const resource = detail.resource as ResourceDto
+
+      console.log({
+        resource,
+      })
+      openModal(resource)
+    })
+
+    return () => {
+      window.removeEventListener(messageTypes.openResourceModal, () => {})
+    }
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
@@ -50,11 +72,11 @@ const ResourceModal = ({ ...props }: Props) => {
     setLoading(true)
 
     axios
-      .post<ResourceDto[]>(urls.api.relearn.resource, payload)
+      .post<ResourceDto>(urls.api.relearn.resource, payload)
       .then(async (res) => {
         // const currentResources = [...resources]
 
-        const savedResource = res.data.find((r) => r.id === payload.id)
+        const savedResource = res.data
 
         if (!savedResource) {
           alert('Resource not found')
@@ -62,7 +84,6 @@ const ResourceModal = ({ ...props }: Props) => {
         }
 
         setInitialValue(savedResource)
-
         // setResources(res.data)
         alert('Resource saved! 😀')
         // setSuccessMessage(<ResourceSavedMessage allResources={res.data} />)
@@ -117,7 +138,7 @@ const ResourceModal = ({ ...props }: Props) => {
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FlexCol gap={8}>
           <Flex gap={16}>
-            {!!form.watch('thumbnail').length && (
+            {!!form.watch('thumbnail')?.length && (
               <FlexCol>
                 <Text>Thumbnail</Text>
                 <ResourceThumbnail

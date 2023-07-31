@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, Visual Studio Code",
+  "name": "Relearn Extension",
+  "description": "Tools for self-learners",
   "version": "1.0",
 
   "options_ui": {
@@ -25,7 +25,20 @@
     "service_worker": "js/background.js"
   },
 
-  "permissions": ["storage", "tabs", "webRequest", "webNavigation", "action"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "webRequest",
+    "webNavigation",
+    "action",
+
+    "contextMenus"
+  ],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
 
   "host_permissions": ["<all_urls>"],
   "commands": {

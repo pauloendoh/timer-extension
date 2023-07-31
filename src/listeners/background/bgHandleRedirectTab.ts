@@ -1,13 +1,13 @@
 import { IRedirectItem } from '../../types/domains/redirect/IRedirectItem'
 import { getSync } from '../../utils/chromeStoragePromises'
-import { storageKeys } from '../../utils/storageKeys'
+import { syncKeys } from '../../utils/syncKeys'
 
 export const bgHandleRedirectTab = async (tab: chrome.tabs.Tab) => {
   const redirectItems = await getSync<IRedirectItem[]>(
-    storageKeys.siteRedirect.redirectItems
+    syncKeys.siteRedirect.redirectItems
   )
 
-  const isActive = await getSync<boolean>(storageKeys.siteRedirect.isActive)
+  const isActive = await getSync<boolean>(syncKeys.siteRedirect.isActive)
   if (!isActive) return
 
   if (!redirectItems) return

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { AuthUserGetDto } from '../../types/domains/AuthUserGetDto'
 import { setSync } from '../../utils/chromeStoragePromises'
-import { storageKeys } from '../../utils/storageKeys'
+import { syncKeys } from '../../utils/syncKeys'
 
 interface IAuthStore {
   authUser: AuthUserGetDto | null
@@ -13,7 +13,7 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
   authUser: null,
 
   setAuthUser: (authUser) => {
-    setSync(storageKeys.user, authUser)
+    setSync(syncKeys.user, authUser)
 
     set({ authUser })
   },

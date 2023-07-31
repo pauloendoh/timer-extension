@@ -17,13 +17,10 @@ export const handleRelearnResource = async (tab: chrome.tabs.Tab) => {
     .then((data: AlreadyRatedResourceDto) => {
       if (!tab.id) return
 
-      console.log({
-        data,
-      })
       if (data.resource) {
         // send message
         chrome.tabs.sendMessage(tab.id, {
-          type: messageTypes.handleResource,
+          type: messageTypes.foundResource,
           resource: data.resource,
           tabId: tab.id,
         })

@@ -3,7 +3,7 @@ import { ValidationError } from 'class-validator'
 import { AuthUserGetDto } from '../types/domains/AuthUserGetDto'
 import { myNotifications } from '../types/myNotifications'
 import { getSync } from '../utils/chromeStoragePromises'
-import { storageKeys } from '../utils/storageKeys'
+import { syncKeys } from '../utils/syncKeys'
 
 export const useAxios = (params?: { redirectOn401?: boolean }) => {
   const redirectOn401 = params?.redirectOn401 || true
@@ -12,7 +12,7 @@ export const useAxios = (params?: { redirectOn401?: boolean }) => {
   // localAxios.defaults.baseURL = process.env.REACT_APP_API_URL
 
   localAxios.interceptors.request.use(async (config) => {
-    const user = await getSync<AuthUserGetDto>(storageKeys.user)
+    const user = await getSync<AuthUserGetDto>(syncKeys.user)
     if (user && config.headers) config.headers['x-auth-token'] = user.token
     return config
   })

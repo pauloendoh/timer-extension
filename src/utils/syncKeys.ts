@@ -1,4 +1,4 @@
-export const storageKeys = {
+export const syncKeys = {
   // github issues
   voteCounts: 'voteCounts',
   user: 'user',
@@ -9,4 +9,7 @@ export const storageKeys = {
     isActive: 'siteRedirect.isActive',
     redirectItems: 'siteRedirect.redirectItems',
   },
+
+  // link scan
+  linkScan: (tabId: string) => 'linkScan/' + tabId,
 }

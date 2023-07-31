@@ -6,6 +6,14 @@ export const messageTypes = {
   redirectToUrl: 'redirectToUrl',
 
   // PE 1/3 - improve name?
-  handleResource: 'handleResource',
+  initReactApp: 'initReactApp',
+  foundResource: 'foundResource',
   hideRelearnButton: 'hideRelearnButton',
-}
+
+  toggleLinkScan: 'toggleLinkScan',
+  saveCurrentPage: 'saveCurrentPage',
+  openResourceModal: 'openResourceModal',
+
+  openLoadingModal: 'openLoadingModal',
+  closeLoadingModal: 'closeLoadingModal',
+} as const

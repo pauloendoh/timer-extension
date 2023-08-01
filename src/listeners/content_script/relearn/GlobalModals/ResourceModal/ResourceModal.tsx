@@ -18,7 +18,6 @@ import useResourceModalStore from '../../../../../hooks/zustand/useResourceModal
 import { ResourceDto } from '../../../../../types/domains/resources/ResourceDto'
 import { messageTypes } from '../../../../../utils/messageTypes'
 import { urls } from '../../../../../utils/urls'
-import RelearnContext from '../../RelearnContext/RelearnContext'
 import ResourceModalTitle from './ResourceModalTitle/ResourceModalTitle'
 import ResourceThumbnail from './ResourceThumbnail/ResourceThumbnail'
 
@@ -27,9 +26,6 @@ type Props = {}
 const ResourceModal = ({ ...props }: Props) => {
   const { initialValue, isOpen, closeModal, setInitialValue, openModal } =
     useResourceModalStore()
-
-  // PE 1/3 - não ta sendo usado.. remover tudo?
-  const { tabId } = React.useContext(RelearnContext)
 
   const [loading, setLoading] = React.useState(false)
   const theme = useMantineTheme()

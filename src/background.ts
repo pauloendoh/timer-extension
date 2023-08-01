@@ -2,8 +2,8 @@ import { background_handleTab } from './listeners/background/background_handleTa
 import { handleBadgeAsync } from './listeners/background/handleBadge'
 import { IssuesState } from './listeners/background/handleGithubIssuePage'
 import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
+import { background_getCurrentTab } from './utils/background_getCurrentTab'
 import { setSync } from './utils/chromeStoragePromises'
-import { getCurrentTab } from './utils/getCurrentTab'
 import { messageTypes } from './utils/messageTypes'
 import { syncKeys } from './utils/syncKeys'
 
@@ -40,7 +40,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
     // No window is focused. All Chrome windows are blurred.
     return
   }
-  const tab = await getCurrentTab()
+  const tab = await background_getCurrentTab()
   background_handleTab(tab)
 })
 
@@ -73,7 +73,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     if (!tab?.id) return
     if (info.menuItemId === 'relearn-save-current-page') {
       chrome.tabs.sendMessage(tab.id, {
-        type: messageTypes.saveCurrentPage,
+        type: messageTypes.checkAndOpenResourceModal,
         tabId: tab.id,
         url: tab.url,
       })

@@ -5,13 +5,12 @@ export const messageTypes = {
 
   redirectToUrl: 'redirectToUrl',
 
-  // PE 1/3 - improve name?
   initReactApp: 'initReactApp',
   foundResource: 'foundResource',
   hideRelearnButton: 'hideRelearnButton',
 
   toggleLinkScan: 'toggleLinkScan',
-  saveCurrentPage: 'saveCurrentPage',
+  checkAndOpenResourceModal: 'checkAndOpenResourceModal',
   openResourceModal: 'openResourceModal',
 
   openLoadingModal: 'openLoadingModal',

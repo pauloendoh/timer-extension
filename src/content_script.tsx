@@ -1,6 +1,6 @@
 import { getHighestVotes } from './listeners/content_script/github-issues/getHighestVotes'
+import { content_checkAndOpenResourceModal } from './listeners/content_script/relearn/content_checkAndOpenResourceModal'
 import { content_initReactApp } from './listeners/content_script/relearn/content_initReactApp'
-import { content_saveCurrentPage } from './listeners/content_script/relearn/content_saveCurrentPage'
 import { content_toggleLinkScan } from './listeners/content_script/relearn/content_toggleLinkScan'
 import { csHideRelearnButton } from './listeners/content_script/relearn/csHideRelearnButton'
 import { messageTypes } from './utils/messageTypes'
@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     content_toggleLinkScan(msg.tabId)
   }
 
-  if (msg.type === messageTypes.saveCurrentPage) {
-    content_saveCurrentPage(msg.url, msg.tabId)
+  if (msg.type === messageTypes.checkAndOpenResourceModal) {
+    content_checkAndOpenResourceModal(msg.url)
   }
 })

@@ -4,8 +4,7 @@ import { messageTypes } from '../../../utils/messageTypes'
 import myAxios from '../../../utils/myAxios'
 import { urls } from '../../../utils/urls'
 
-// PE 1/3 -
-export const content_saveCurrentPage = async (url: string, tabId: number) => {
+export const content_checkAndOpenResourceModal = async (url: string) => {
   window.dispatchEvent(new CustomEvent(messageTypes.openLoadingModal))
 
   const data = await myAxios

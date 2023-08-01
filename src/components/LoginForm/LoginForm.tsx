@@ -9,7 +9,7 @@ import { urls } from '../../utils/urls'
 interface FormValues {
   username: string
   email: string
-  password: string // PE 1/3 - is not used for login?
+  password: string
 }
 
 const LoginForm = () => {
@@ -17,11 +17,7 @@ const LoginForm = () => {
 
   const axios = useAxios()
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-    control,
-  } = useForm<FormValues>({
+  const form = useForm<FormValues>({
     defaultValues: { username: '', email: '', password: '' },
   })
 
@@ -42,10 +38,10 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="d-flex flex-column">
       <Box>
         <Controller
-          control={control}
+          control={form.control}
           name="email"
           render={({ field }) => (
             <TextInput
@@ -62,7 +58,7 @@ const LoginForm = () => {
 
       <Box mt={1}>
         <Controller
-          control={control}
+          control={form.control}
           name="password"
           render={({ field }) => (
             <TextInput
@@ -81,7 +77,7 @@ const LoginForm = () => {
           id="auth-submit-button"
           type="submit"
           color="primary"
-          loading={isSubmitting}
+          loading={form.formState.isSubmitting}
           style={{
             textTransform: 'none',
             fontSize: 16,

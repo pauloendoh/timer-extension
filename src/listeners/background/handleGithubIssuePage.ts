@@ -22,7 +22,10 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
 
   if (!tab?.id || !currentUrl) return
 
-  if (currentUrl.includes('github.com') && currentUrl.includes('/issues/')) {
+  if (
+    currentUrl.includes('github.com') &&
+    (currentUrl.includes('/issues/') || currentUrl.includes('/discussions/'))
+  ) {
     chrome.tabs.sendMessage(
       tab.id,
       {
@@ -42,7 +45,6 @@ const getHighestVotes = async (tab: chrome.tabs.Tab) => {
         }
       }
     )
-
     return
   }
 

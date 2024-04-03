@@ -11,23 +11,28 @@ let currentComment: HTMLElement | null = null
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.type === messageTypes.getHighestVotes) {
-    return getHighestVotes(sendResponse)
+    return getHighestVotes(sendResponse, sender.tab?.id)
   }
 
   if (msg.type === messageTypes.scrollToComment) {
     const commentId = msg.commentId
 
-    const comment = document
+    let commentElement = document
       .getElementById(commentId)
       ?.querySelector('.comment-reactions') as HTMLElement | null
-    if (comment) {
+
+    if (commentElement) {
       if (currentComment) {
         currentComment.style.border = 'none'
       }
-      currentComment = comment
-      comment.style.border = '4px solid #8957e5'
+      currentComment = commentElement
+      commentElement.style.setProperty(
+        'border',
+        '4px solid #8957e5',
+        'important'
+      )
 
-      const y = comment.getBoundingClientRect().top + window.scrollY
+      const y = commentElement.getBoundingClientRect().top + window.scrollY
       window.scrollTo({
         top: y - 200,
         behavior: 'smooth',

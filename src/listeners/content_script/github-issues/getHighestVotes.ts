@@ -1,9 +1,19 @@
 import { VoteCount } from '../../../types/types'
 
-export const getHighestVotes = (sendResponse: (response?: any) => void) => {
+export const getHighestVotes = (
+  sendResponse: (response?: any) => void,
+  tabId?: number
+) => {
   const results: VoteCount[] = []
 
-  const voteComments = document.querySelectorAll('.timeline-comment-group')
+  const pageType = window.location.href.includes('/issues/')
+    ? 'issue'
+    : 'discussion'
+
+  const voteComments =
+    pageType === 'issue'
+      ? document.querySelectorAll('.timeline-comment-group')
+      : document.querySelectorAll('.discussions-timeline-scroll-target')
 
   for (const comment of voteComments) {
     const id = comment.getAttribute('id')
@@ -22,7 +32,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const likeCountHtml = reactions.querySelector(
       '[aria-label="react with thumbs up"]'
     )
-    if (likeCountHtml && likeCountHtml.textContent) {
+    if (likeCountHtml?.textContent) {
       const number = parseInt(likeCountHtml.textContent.split(`\n`)[1])
       if (number) likeCount = number
     }
@@ -30,7 +40,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const loveCountHtml = reactions.querySelector(
       '[aria-label="react with heart"]'
     )
-    if (loveCountHtml && loveCountHtml.textContent) {
+    if (loveCountHtml?.textContent) {
       const number = parseInt(loveCountHtml.textContent.split(`\n`)[1])
       if (number) loveCount = number
     }
@@ -38,7 +48,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const hoorayCountHtml = reactions.querySelector(
       '[aria-label="react with hooray"]'
     )
-    if (hoorayCountHtml && hoorayCountHtml.textContent) {
+    if (hoorayCountHtml?.textContent) {
       const number = parseInt(hoorayCountHtml.textContent.split(`\n`)[1])
       if (number) hoorayCount = number
     }
@@ -46,7 +56,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const rocketCountHtml = reactions.querySelector(
       '[aria-label="react with rocket]'
     )
-    if (rocketCountHtml && rocketCountHtml.textContent) {
+    if (rocketCountHtml?.textContent) {
       const number = parseInt(rocketCountHtml.textContent.split(`\n`)[1])
       if (number) rocketCount = number
     }
@@ -54,7 +64,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const smileCountHtml = reactions.querySelector(
       '[aria-label="react with smile"]'
     )
-    if (smileCountHtml && smileCountHtml.textContent) {
+    if (smileCountHtml?.textContent) {
       const number = parseInt(smileCountHtml.textContent.split(`\n`)[1])
       if (number) smileCount = number
     }
@@ -62,7 +72,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const sadCountHtml = reactions.querySelector(
       '[aria-label="react with confused"]'
     )
-    if (sadCountHtml && sadCountHtml.textContent) {
+    if (sadCountHtml?.textContent) {
       const number = parseInt(sadCountHtml.textContent.split(`\n`)[1])
       if (number) sadCount = number
     }
@@ -70,7 +80,7 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     const dislikeCountHtml = reactions.querySelector(
       '[aria-label="react with thumbs down"]'
     )
-    if (dislikeCountHtml && dislikeCountHtml.textContent) {
+    if (dislikeCountHtml?.textContent) {
       const number = parseInt(dislikeCountHtml.textContent.split(`\n`)[1])
       if (number) dislikeCount = number
     }
@@ -95,5 +105,4 @@ export const getHighestVotes = (sendResponse: (response?: any) => void) => {
     .sort((a, b) => b.voteCount - a.voteCount)
 
   sendResponse(finalResults)
-  return
 }

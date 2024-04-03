@@ -1,9 +1,8 @@
 import { VoteCount } from '../../types/types'
+import { isValidGithubPage } from '../../utils/github-issues/isValidGithubPage'
 import { messageTypes } from '../../utils/messageTypes'
 
 export const addNewUrlListener = async () => {
-  let voteCounts: VoteCount[] = []
-  let currentVoteCountIndex = -1
   let started = false
 
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -11,7 +10,7 @@ export const addNewUrlListener = async () => {
 
     if (!tabId || !currentUrl) return
 
-    if (currentUrl.includes('github.com') && currentUrl.includes('/issues/')) {
+    if (isValidGithubPage(currentUrl)) {
       chrome.tabs.sendMessage(
         tabId,
         {
@@ -19,15 +18,10 @@ export const addNewUrlListener = async () => {
         },
         (response: VoteCount[]) => {
           if (!started && response.length > 0) {
-            voteCounts = response
-
-            currentVoteCountIndex = -1
             started = true
           }
         }
       )
-
-      return
     }
   })
 }

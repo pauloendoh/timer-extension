@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Relearn Extension",
-  "description": "Tools for self-learners",
+  "name": "Github most liked",
+  "description": "Easily navigate through issues and discussions on Github",
   "version": "1.0",
 
   "options_ui": {
@@ -10,7 +10,11 @@
   },
 
   "action": {
-    "default_icon": "icon.png",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
     "default_popup": "popup.html"
   },
 
@@ -30,7 +34,6 @@
     "tabs",
     "webRequest",
     "webNavigation",
-    "action",
 
     "contextMenus"
   ],

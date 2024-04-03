@@ -1,4 +1,5 @@
 import { getSync, setSync } from '../../utils/chromeStoragePromises'
+import { isValidGithubPage } from '../../utils/github-issues/isValidGithubPage'
 import { messageTypes } from '../../utils/messageTypes'
 import { syncKeys } from '../../utils/syncKeys'
 import { IssuesState } from '../background/handleGithubIssuePage'
@@ -49,19 +50,12 @@ export const bgHandleGithubIssuesCommand = async (
 
   let voteCount = state.voteCounts[state.currentVoteCountIndex]
   if (!voteCount) {
-    state.currentVoteCountIndex === 0
     voteCount = state.voteCounts[state.currentVoteCountIndex]
   }
-  if (
-    voteCount &&
-    currentUrl.includes('github.com') &&
-    currentUrl.includes('/issues/')
-  ) {
+  if (voteCount && isValidGithubPage(currentUrl)) {
     chrome.tabs.sendMessage(tabId, {
       type: messageTypes.scrollToComment,
       commentId: voteCount.commentId,
     })
-
-    return
   }
 }

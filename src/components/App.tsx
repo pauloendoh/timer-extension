@@ -1,11 +1,13 @@
 import { MantineProvider } from '@mantine/core'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import GlobalModals from '../listeners/content_script/relearn/GlobalModals/GlobalModals'
 import RelearnContext from '../listeners/content_script/relearn/RelearnContext/RelearnContext'
 import ResourcePopup from '../listeners/content_script/relearn/ResourcePopup'
 import { ResourceDto } from '../types/domains/resources/ResourceDto'
+import { isValidGithubPage } from '../utils/github-issues/isValidGithubPage'
 import { messageTypes } from '../utils/messageTypes'
 import { myTheme } from '../utils/myTheme'
+import GithubMostLikedSection from './GithubMostLikedSection/GithubMostLikedSection'
 
 type Props = {
   tabId: number
@@ -13,6 +15,10 @@ type Props = {
 
 const App = ({ ...props }: Props) => {
   const [foundResource, setFoundResource] = useState<ResourceDto>()
+
+  const isGithubPage = useMemo(() => {
+    return isValidGithubPage(window.location.href)
+  }, [])
 
   useEffect(() => {
     window.addEventListener(messageTypes.foundResource, (event) => {
@@ -50,6 +56,19 @@ const App = ({ ...props }: Props) => {
             }}
           >
             <ResourcePopup initialResource={foundResource} />
+          </div>
+        )}
+
+        {isGithubPage && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: 16,
+              right: 80,
+              zIndex: 1000,
+            }}
+          >
+            <GithubMostLikedSection tabId={props.tabId} />
           </div>
         )}
 

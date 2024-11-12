@@ -1,6 +1,6 @@
+import { IssuesState } from './listeners/background/background_handleGithubPage'
 import { background_handleTab } from './listeners/background/background_handleTab'
 import { handleBadgeAsync } from './listeners/background/handleBadge'
-import { IssuesState } from './listeners/background/handleGithubIssuePage'
 import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
 import { background_getCurrentTab } from './utils/background_getCurrentTab'
 import { setSync } from './utils/chromeStoragePromises'
@@ -79,4 +79,15 @@ chrome.runtime.onInstalled.addListener((details) => {
       })
     }
   })
+})
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (
+    (message.command === 'nextIssue' || message.command === 'prevIssue') &&
+    sender.tab
+  ) {
+    bgHandleCommand(message.command, sender.tab)
+
+    sendResponse(true)
+  }
 })

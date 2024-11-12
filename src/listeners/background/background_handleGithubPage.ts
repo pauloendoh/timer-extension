@@ -10,7 +10,7 @@ export type IssuesState = {
   prevIssuesUrl: string
 }
 
-export const handleGithubIssuePage = async (tab: chrome.tabs.Tab) => {
+export const background_handleGithubPage = async (tab: chrome.tabs.Tab) => {
   const state = await getSync<IssuesState>(syncKeys.issues)
   if (tab.url !== state?.prevIssuesUrl) {
     await getHighestVotes(tab)

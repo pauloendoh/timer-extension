@@ -2,7 +2,7 @@ import { getSync, setSync } from '../../utils/chromeStoragePromises'
 import { isValidGithubPage } from '../../utils/github-issues/isValidGithubPage'
 import { messageTypes } from '../../utils/messageTypes'
 import { syncKeys } from '../../utils/syncKeys'
-import { IssuesState } from '../background/handleGithubIssuePage'
+import { IssuesState } from '../background/background_handleGithubPage'
 
 export const bgHandleGithubIssuesCommand = async (
   command: string,

@@ -2,8 +2,8 @@ import { setSync } from '../../utils/chromeStoragePromises'
 import { isValidGithubPage } from '../../utils/github-issues/isValidGithubPage'
 import { messageTypes } from '../../utils/messageTypes'
 import { syncKeys } from '../../utils/syncKeys'
+import { background_handleGithubPage } from './background_handleGithubPage'
 import { bgHandleRedirectTab } from './bgHandleRedirectTab'
-import { handleGithubIssuePage } from './handleGithubIssuePage'
 
 export const background_handleTab = async (
   tab: chrome.tabs.Tab,
@@ -13,7 +13,7 @@ export const background_handleTab = async (
 ) => {
   if (!tab.url || !tab.id) return
   if (isValidGithubPage(tab.url)) {
-    handleGithubIssuePage(tab)
+    background_handleGithubPage(tab)
   }
 
   chrome.tabs.sendMessage(tab.id, {

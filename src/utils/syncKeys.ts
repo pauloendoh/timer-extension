@@ -10,6 +10,13 @@ export const syncKeys = {
     redirectItems: 'siteRedirect.redirectItems',
   },
 
+  timer: {
+    minutesInput: 'timer.minutesInput',
+    remainingMs: 'timer.remainingMs',
+    isRinging: 'timer.isRinging',
+    interval: 'timer.interval',
+  },
+
   // link scan
   linkScan: (tabId: string) => 'linkScan/' + tabId,
 }

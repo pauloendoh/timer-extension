@@ -11,30 +11,24 @@ import {
 import React from 'react'
 import { MdClose } from 'react-icons/md'
 import { useChromeStorageSync } from 'use-chrome-storage'
-import { handleBadgeAsync } from '../../listeners/background/handleBadge'
-import { IRedirectItem } from '../../types/domains/redirect/IRedirectItem'
-import { setSync } from '../../utils/chromeStoragePromises'
-import { syncKeys } from '../../utils/syncKeys'
-import { FlexCol } from '../_UI/boxes/FlexCol'
-import { FlexVCenter } from '../_UI/boxes/FlexVCenter'
+import { handleBadgeAsync } from '../../../listeners/background/handleBadge'
+import { IRedirectItem } from '../../../types/domains/redirect/IRedirectItem'
+import { setSync } from '../../../utils/chromeStoragePromises'
+import { syncKeys } from '../../../utils/syncKeys'
+import { FlexCol } from '../../_shared/boxes/FlexCol'
+import { FlexVCenter } from '../../_shared/boxes/FlexVCenter'
 
 type Props = {}
 
 const SiteRedirect = (props: Props) => {
-  // @ts-expect-error
-  const [isActive, setIsActive, isPersistent, error] = useChromeStorageSync(
+  const [isActive, setIsActive] = useChromeStorageSync(
     syncKeys.siteRedirect.isActive,
     false
   )
 
-  // @ts-expect-error
-  const [redirectItems, setRedirectItems]: [
-    redirectItems: IRedirectItem[],
-    setRedirectItems: (redirectItems: IRedirectItem[]) => void
-  ] = useChromeStorageSync<IRedirectItem[]>(
-    syncKeys.siteRedirect.redirectItems,
-    []
-  )
+  const [redirectItems, setRedirectItems] = useChromeStorageSync<
+    IRedirectItem[]
+  >(syncKeys.siteRedirect.redirectItems, [])
 
   const [urlInput, setUrlInput] = React.useState('')
   const [redirectInput, setRedirectInput] = React.useState('')

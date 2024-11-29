@@ -3,7 +3,7 @@ import { NotificationsProvider } from '@mantine/notifications'
 import { MantineProvider, Paper } from '@mantine/core'
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import SiteRedirect from './components/SiteRedirect/SiteRedirect'
+import TimerPopupRaw from './components/popup/TimerPopup/TimerPopup'
 import useCheckAuthOrLogout from './hooks/useCheckAuthUserOrLogout'
 import { useLogout } from './hooks/useLogout'
 import useAuthStore from './hooks/zustand/useAuthStore'
@@ -27,7 +27,7 @@ const Popup = () => {
       <Button color="red" onClick={logout}>
         Logout
       </Button> */}
-      <SiteRedirect />
+      <TimerPopupRaw />
     </Paper>
   )
 }

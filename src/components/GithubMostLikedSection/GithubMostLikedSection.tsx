@@ -1,7 +1,7 @@
 import { ActionIcon, Paper } from '@mantine/core'
 import React from 'react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
-import { FlexVCenter } from '../_UI/boxes/FlexVCenter'
+import { FlexVCenter } from '../_shared/boxes/FlexVCenter'
 
 type Props = {
   tabId: number

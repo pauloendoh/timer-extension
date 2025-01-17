@@ -15,4 +15,8 @@ export const messageTypes = {
 
   openLoadingModal: 'openLoadingModal',
   closeLoadingModal: 'closeLoadingModal',
+
+  startTimer: 'startTimer',
+  cancelTimer: 'cancelTimer',
+  getRemainingMs: 'getRemainingMs',
 } as const

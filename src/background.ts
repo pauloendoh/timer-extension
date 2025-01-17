@@ -1,6 +1,11 @@
 import { IssuesState } from './listeners/background/background_handleGithubPage'
 import { background_handleTab } from './listeners/background/background_handleTab'
 import { handleBadgeAsync } from './listeners/background/handleBadge'
+import {
+  bgHandleCancelTimer,
+  bgHandleGetRemainingMs,
+  bgHandleStartTimer,
+} from './listeners/background/handlers/bgHandleStartTimer'
 import { bgHandleCommand } from './listeners/shortcutCommands/bgHandleCommand'
 import { background_getCurrentTab } from './utils/background_getCurrentTab'
 import { setSync } from './utils/chromeStoragePromises'
@@ -89,5 +94,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     bgHandleCommand(message.command, sender.tab)
 
     sendResponse(true)
+  }
+
+  if (message.type === messageTypes.startTimer) {
+    bgHandleStartTimer(message.totalMillis)
+  }
+
+  if (message.type === messageTypes.cancelTimer) {
+    bgHandleCancelTimer()
+  }
+
+  if (message.type === messageTypes.getRemainingMs) {
+    const remainingMs = bgHandleGetRemainingMs()
+    sendResponse(remainingMs)
   }
 })

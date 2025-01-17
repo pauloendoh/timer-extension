@@ -12,7 +12,7 @@ export const getSync = <T>(key: string) => {
   })
 }
 
-// sync set
+// sync set (can only used 1800 per hour)
 export const setSync = <T>(key: string, value: T) => {
   return new Promise<T>((resolve, reject) => {
     chrome.storage.sync.set({ [key]: value }, () => {

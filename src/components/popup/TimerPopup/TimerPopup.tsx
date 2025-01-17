@@ -1,10 +1,19 @@
-import { ActionIcon, Box, Button, Flex, TextInput, Title } from '@mantine/core'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Flex,
+  NumberInput,
+  Title,
+} from '@mantine/core'
 import { useIntersection } from '@mantine/hooks'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { MdClose } from 'react-icons/md'
 import { getSync, setSync } from '../../../utils/chromeStoragePromises'
+import { messageTypes } from '../../../utils/messageTypes'
 import { syncKeys } from '../../../utils/syncKeys'
 import { FlexCol } from '../../_shared/boxes/FlexCol'
+import { getFormattedTimeRemaining } from './getFormattedTimeRemaining/getFormattedTimeRemaining'
 
 type Props = {}
 
@@ -12,42 +21,45 @@ function stopAudio() {
   chrome.offscreen.closeDocument()
 }
 
-function startAudio() {
-  chrome.offscreen.createDocument({
-    url: chrome.runtime.getURL('audio.html'),
-    reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
-    justification: 'notification',
-  })
-}
-
 const DEVELOPER_TIMER_REDUCTION_MULTIPLIER =
   // process.env.NODE_ENV === 'development' ? 30 : 1
   1
 
 const TimerPopup = ({ ...props }: Props) => {
-  const [minutesInput, setMinutesInput] = useState('')
+  const [minutesInput, setMinutesInput] = useState<number | undefined>(0)
+  const [secondsInput, setSecondsinput] = useState<number | undefined>(0)
   const [remainingMs, setRemainingMs] = useState(0)
   const [isRinging, setIsRinging] = useState(false)
 
   const [isReady, setIsReady] = useState(false)
 
+  const [shouldAutoStart, setShouldAutoStart] = useState(false)
+
   useEffect(() => {
     const prepare = async () => {
-      const minutesInput = await getSync<string>(syncKeys.timer.minutesInput)
-      const remainingMs = await getSync<number>(syncKeys.timer.remainingMs)
-      const isRinging = await getSync<boolean>(syncKeys.timer.isRinging)
+      const minutesInputVal = await getSync<number>(syncKeys.timer.minutesInput)
+      const secondsInputVal = await getSync<number>(syncKeys.timer.secondsInput)
 
-      if (minutesInput !== undefined) {
-        setMinutesInput(minutesInput)
-      }
+      chrome.runtime.sendMessage(
+        {
+          type: messageTypes.getRemainingMs,
+        },
+        (response) => {
+          setRemainingMs(response)
 
-      if (remainingMs !== undefined) {
-        setRemainingMs(remainingMs)
-      }
+          if (response > 0) {
+            setShouldAutoStart(true)
+          }
 
-      if (isRinging !== undefined) {
-        setIsRinging(isRinging)
-      }
+          if (minutesInputVal !== undefined) {
+            setMinutesInput(minutesInputVal)
+          }
+
+          if (secondsInputVal !== undefined) {
+            setSecondsinput(secondsInputVal)
+          }
+        }
+      )
 
       setIsReady(true)
     }
@@ -56,36 +68,26 @@ const TimerPopup = ({ ...props }: Props) => {
   }, [])
 
   useEffect(() => {
-    if (!isReady) {
-      return
+    if (shouldAutoStart) {
+      startTimer(remainingMs)
     }
+  }, [shouldAutoStart])
 
-    setSync(syncKeys.timer.minutesInput, minutesInput)
-    setSync(syncKeys.timer.remainingMs, remainingMs)
-    setSync(syncKeys.timer.isRinging, isRinging)
-  }, [isReady, minutesInput, remainingMs, isRinging])
+  // não lembro pra que é isso
+  // useEffect(() => {
+  //   if (!isReady) {
+  //     return
+  //   }
 
-  const canSubmit = useMemo(() => {
-    if (remainingMs || isRinging) {
-      return false
-    }
-
-    const minutesNumberValue = Number(minutesInput)
-
-    if (isNaN(minutesNumberValue)) {
-      return false
-    }
-
-    if (minutesNumberValue <= 0) {
-      return false
-    }
-
-    return true
-  }, [minutesInput, remainingMs, isRinging])
+  //   setSync(syncKeys.timer.minutesInput, minutesInput)
+  //   setSync(syncKeys.timer.secondsInput, secondsInput)
+  //   setSync(syncKeys.timer.remainingMs, remainingMs)
+  //   setSync(syncKeys.timer.isRinging, isRinging)
+  // }, [isReady, minutesInput, secondsInput, remainingMs, isRinging])
 
   useEffect(() => {
     if (isRinging) {
-      startAudio()
+      // startAudio()
     } else {
       stopAudio()
     }
@@ -93,25 +95,10 @@ const TimerPopup = ({ ...props }: Props) => {
 
   const timerInterval = useRef<NodeJS.Timeout>()
 
-  const getFormattedTimeRemaining = (remainingMs: number) => {
-    const minutes = Math.floor(remainingMs / 1000 / 60)
-    const seconds = Math.floor((remainingMs / 1000) % 60)
-
-    if (minutes === 0 && seconds === 0) {
-      return ''
-    }
-
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
-
-  const startTimer = () => {
-    const minutesNumberValue = Number(minutesInput)
-
+  const startTimer = (totalMillis: number) => {
     if (timerInterval.current) {
       clearInterval(timerInterval.current)
     }
-
-    const totalMillis = minutesNumberValue * 60 * 1000
 
     setRemainingMs(totalMillis)
 
@@ -168,25 +155,60 @@ const TimerPopup = ({ ...props }: Props) => {
     }
   }, [entry])
 
+  const minutesAndSecondsInMillis = useMemo(() => {
+    return Number(minutesInput) * 60 * 1000 + Number(secondsInput) * 1000
+  }, [minutesInput, secondsInput])
+
+  const canSubmit = useMemo(() => {
+    if (remainingMs || isRinging) {
+      return false
+    }
+
+    if (minutesAndSecondsInMillis <= 0) {
+      return false
+    }
+
+    return true
+  }, [minutesAndSecondsInMillis, remainingMs, isRinging])
+
   return (
     <Box ref={containerRef}>
       <FlexCol gap={16}>
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            startTimer()
+
+            setSync(syncKeys.timer.minutesInput, minutesInput)
+            setSync(syncKeys.timer.secondsInput, secondsInput)
+
+            startTimer(minutesAndSecondsInMillis)
+
+            chrome.runtime.sendMessage({
+              type: messageTypes.startTimer,
+              totalMillis: minutesAndSecondsInMillis,
+            })
           }}
         >
           <Flex align={'flex-end'} gap={8}>
-            <TextInput
+            <NumberInput
               ref={inputRef}
-              label="Timer (in minutes)"
-              placeholder="Enter timer value"
-              value={minutesInput ?? ''}
-              onChange={(e) => {
-                setMinutesInput(e.currentTarget.value)
+              label="Minutes"
+              value={minutesInput}
+              onChange={(val) => {
+                setMinutesInput(val ?? 0)
               }}
+              min={0}
             />
+            <NumberInput
+              label="Seconds"
+              value={secondsInput}
+              onChange={(val) => {
+                setSecondsinput(val ?? 0)
+              }}
+              min={0}
+              max={59}
+            />
+
             <Button type="submit" disabled={!canSubmit}>
               Start
             </Button>
@@ -205,6 +227,10 @@ const TimerPopup = ({ ...props }: Props) => {
                   if (timerInterval.current) {
                     clearInterval(timerInterval.current)
                   }
+
+                  chrome.runtime.sendMessage({
+                    type: messageTypes.cancelTimer,
+                  })
                 }}
               >
                 <MdClose fontSize={24} />

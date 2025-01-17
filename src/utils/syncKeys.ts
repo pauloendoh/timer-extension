@@ -12,9 +12,7 @@ export const syncKeys = {
 
   timer: {
     minutesInput: 'timer.minutesInput',
-    remainingMs: 'timer.remainingMs',
-    isRinging: 'timer.isRinging',
-    interval: 'timer.interval',
+    secondsInput: 'timer.secondsInput',
   },
 
   // link scan

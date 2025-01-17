@@ -5,8 +5,6 @@ import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import TimerPopupRaw from './components/popup/TimerPopup/TimerPopup'
 import useCheckAuthOrLogout from './hooks/useCheckAuthUserOrLogout'
-import { useLogout } from './hooks/useLogout'
-import useAuthStore from './hooks/zustand/useAuthStore'
 import { myTheme } from './utils/myTheme'
 
 const Popup = () => {
@@ -15,9 +13,6 @@ const Popup = () => {
   useEffect(() => {
     checkAuthOrLogout()
   }, [])
-
-  const authUser = useAuthStore((s) => s.authUser)
-  const logout = useLogout()
 
   return (
     <Paper sx={{ width: 300, minHeight: 300, padding: 16 }}>

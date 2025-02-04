@@ -1,8 +1,7 @@
 {
   "manifest_version": 3,
-
-  "name": "Github most liked",
-  "description": "Easily navigate through issues and discussions on Github",
+  "name": "My Timer Extension",
+  "description": "Develop by endoh.io",
   "version": "1.0",
 
   "options_ui": {
@@ -45,19 +44,5 @@
     "128": "icon.png"
   },
 
-  "host_permissions": ["<all_urls>"],
-  "commands": {
-    "nextIssue": {
-      "suggested_key": {
-        "default": "Ctrl+L"
-      },
-      "description": "Go to next most liked"
-    },
-    "prevIssue": {
-      "suggested_key": {
-        "default": "Ctrl+K"
-      },
-      "description": "Go to previous most liked"
-    }
-  }
+  "host_permissions": ["<all_urls>"]
 }

@@ -10,9 +10,9 @@
 
   "action": {
     "default_icon": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
+      "16": "icon.webp",
+      "48": "icon.webp",
+      "128": "icon.webp"
     },
     "default_popup": "popup.html"
   },
@@ -39,9 +39,9 @@
     "offscreen"
   ],
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "icon.webp",
+    "48": "icon.webp",
+    "128": "icon.webp"
   },
 
   "host_permissions": ["<all_urls>"]

@@ -151,7 +151,7 @@ const TimerPopup = ({ ...props }: Props) => {
 
   useEffect(() => {
     if (entry?.isIntersecting) {
-      inputRef.current?.focus()
+      inputRef.current?.select()
     }
   }, [entry])
 

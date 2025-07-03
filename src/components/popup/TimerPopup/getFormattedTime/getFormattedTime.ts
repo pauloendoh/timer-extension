@@ -1,4 +1,4 @@
-export const getFormattedTimeRemaining = (remainingMs: number) => {
+export const getFormattedTime = (remainingMs: number) => {
   const minutes = Math.floor(remainingMs / 1000 / 60)
   const seconds = Math.floor((remainingMs / 1000) % 60)
 

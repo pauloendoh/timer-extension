@@ -1,4 +1,4 @@
-import { getFormattedTimeRemaining } from '../../../components/popup/TimerPopup/getFormattedTimeRemaining/getFormattedTimeRemaining'
+import { getFormattedTime } from '../../../components/popup/TimerPopup/getFormattedTime/getFormattedTime'
 import { startAudio } from '../../../components/popup/TimerPopup/startAudio/startAudio'
 
 let interval: NodeJS.Timeout | null = null
@@ -14,7 +14,7 @@ export const bgHandleStartTimer = (totalMillis: number) => {
   interval = setInterval(() => {
     remainingMs -= 1000
     chrome.action.setBadgeText({
-      text: getFormattedTimeRemaining(remainingMs),
+      text: getFormattedTime(remainingMs),
     })
 
     if (remainingMs <= 0) {

@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   NumberInput,
+  Text,
   Title,
 } from '@mantine/core'
 import { useIntersection } from '@mantine/hooks'
@@ -13,7 +14,7 @@ import { getSync, setSync } from '../../../utils/chromeStoragePromises'
 import { messageTypes } from '../../../utils/messageTypes'
 import { syncKeys } from '../../../utils/syncKeys'
 import { FlexCol } from '../../_shared/boxes/FlexCol'
-import { getFormattedTimeRemaining } from './getFormattedTimeRemaining/getFormattedTimeRemaining'
+import { getFormattedTime } from './getFormattedTime/getFormattedTime'
 
 type Props = {}
 
@@ -95,12 +96,22 @@ const TimerPopup = ({ ...props }: Props) => {
 
   const timerInterval = useRef<NodeJS.Timeout>()
 
-  const startTimer = (totalMillis: number) => {
+  const [totalMillis, setTotalMillis] = useState(0)
+
+  const startTimer = (remainingMillis: number) => {
+    getSync<number>(syncKeys.timer.minutesInput).then((minutesInput) => {
+      getSync<number>(syncKeys.timer.secondsInput).then((secondsInput) => {
+        setTotalMillis(
+          (minutesInput ?? 0) * 60 * 1000 + (secondsInput ?? 0) * 1000
+        )
+      })
+    })
+
     if (timerInterval.current) {
       clearInterval(timerInterval.current)
     }
 
-    setRemainingMs(totalMillis)
+    setRemainingMs(remainingMillis)
 
     timerInterval.current = setInterval(() => {
       setRemainingMs((prev) => {
@@ -119,7 +130,7 @@ const TimerPopup = ({ ...props }: Props) => {
   }
 
   const formattedTimeRemaining = useMemo(() => {
-    return getFormattedTimeRemaining(remainingMs)
+    return getFormattedTime(remainingMs)
   }, [remainingMs])
 
   useEffect(() => {
@@ -150,10 +161,12 @@ const TimerPopup = ({ ...props }: Props) => {
   const { ref: containerRef, entry } = useIntersection<HTMLInputElement>()
 
   useEffect(() => {
-    if (entry?.isIntersecting) {
-      inputRef.current?.select()
+    if (entry?.isIntersecting && isReady) {
+      setTimeout(() => {
+        inputRef.current?.select()
+      }, 100)
     }
-  }, [entry])
+  }, [entry, isReady])
 
   const minutesAndSecondsInMillis = useMemo(() => {
     return Number(minutesInput) * 60 * 1000 + Number(secondsInput) * 1000
@@ -216,7 +229,7 @@ const TimerPopup = ({ ...props }: Props) => {
         </form>
 
         {!!formattedTimeRemaining && (
-          <Flex direction="column">
+          <FlexCol>
             <Flex align="center" justify={'space-between'}>
               <Title order={1}>{formattedTimeRemaining}</Title>
               <ActionIcon
@@ -236,7 +249,10 @@ const TimerPopup = ({ ...props }: Props) => {
                 <MdClose fontSize={24} />
               </ActionIcon>
             </Flex>
-          </Flex>
+            <Text component="span" color="dimmed">
+              {`Total ${getFormattedTime(totalMillis)}`}
+            </Text>
+          </FlexCol>
         )}
 
         {isRinging && (
